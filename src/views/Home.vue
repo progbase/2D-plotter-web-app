@@ -1,19 +1,24 @@
 <template>
   <div class="home">
-    <input
-      type="file"
-      name="pic"
-      accept="image/*"
-      @change="upload">
-
-
-    <img
-      class="raw-image"
-      :src="rawSrc">
-
-    <img
-      class="mono-image"
-      :src="monoSrc">
+    <div class="columns is-desktop">
+      <div class="column">
+        <img
+          class="raw-image"
+          :src="rawSrc">
+      </div>
+      <div class="column">
+        <input
+          type="file"
+          name="pic"
+          accept="image/*"
+          @change="upload">
+      </div>
+      <div class="column">
+        <img
+          class="mono-image"
+          :src="monoSrc">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -93,3 +98,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.raw-image, .mono-image {
+  width: 300px;
+}
+</style>
