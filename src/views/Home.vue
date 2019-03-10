@@ -1,106 +1,83 @@
 <template>
   <div class="home">
-    <div class="columns is-desktop">
+    <div class="columns">
       <div class="column">
-        <img
-          class="raw-image"
-          :src="rawSrc">
+        <upload @raw-load="rawLoaded" @mono-load="monoLoaded" />
       </div>
-      <div class="column">
-        <input
-          type="file"
-          name="pic"
-          accept="image/*"
-          @change="upload">
-      </div>
-      <div class="column">
-        <img
-          class="mono-image"
-          :src="monoSrc">
-      </div>
+    </div>
+
+    <div class="preview">
+      <image-card
+        :src="rawSrc"
+        class="small-image"
+        @click="swap" />
+
+      <image-card
+        :src="monoSrc"
+        class="large-image" />
     </div>
   </div>
 </template>
 
 <script>
+import PlaceholderImage from '../assets/meow.png';
+import BWPlaceholderImage from '../assets/meow-bw.png';
+import Upload from '../components/Uploader.vue';
+import ImageCard from '../components/ImageCard.vue';
+
 export default {
   name: 'Home',
-  components: {},
+  components: { Upload, ImageCard },
 
   data: () => ({
-    rawSrc: '',
-    monoSrc: '',
+    rawSrc: PlaceholderImage,
+    monoSrc: BWPlaceholderImage,
   }),
 
   methods: {
-    async upload(e) {
-      const imageFile = e.srcElement.files[0];
-
-      this.rawSrc = await this.readRaw(imageFile);
-      this.monoSrc = await this.monoify(imageFile);
+    rawLoaded(src) {
+      this.rawSrc = src;
     },
 
-    readRaw(imageFile) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-          resolve(e.target.result);
-        };
-
-        reader.onerror = (err) => {
-          reject(err);
-        };
-
-        reader.readAsDataURL(imageFile);
-      });
+    monoLoaded(src) {
+      this.monoSrc = src;
     },
 
-    monoify(imageFile) {
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-
-      return createImageBitmap(imageFile).then((imageBitmap) => {
-        canvas.width = imageBitmap.width;
-        canvas.height = imageBitmap.height;
-
-        context.drawImage(imageBitmap, 0, 0);
-
-        const imageData = context.getImageData(0, 0, imageBitmap.height, imageBitmap.width);
-
-        for (let i = 0; i < imageData.data.length; i += 4) {
-          const R = imageData.data[i + 0];
-          const G = imageData.data[i + 1];
-          const B = imageData.data[i + 2];
-          const A = imageData.data[i + 3];
-
-          const GRAY = (R + G + B) / 3;
-
-          if (GRAY < 128 && A > 0) { // todo: upgrade algotithm
-            imageData.data[i + 0] = 0;
-            imageData.data[i + 1] = 0;
-            imageData.data[i + 2] = 0;
-          } else {
-            imageData.data[i + 0] = 255;
-            imageData.data[i + 1] = 255;
-            imageData.data[i + 2] = 255;
-          }
-
-          imageData.data[i + 3] = 255; // alpha
-        }
-
-        context.putImageData(imageData, 0, 0);
-        const imageBase64 = canvas.toDataURL();
-
-        return imageBase64;
-      });
+    swap() {
+      const temp = this.rawSrc;
+      this.rawSrc = this.monoSrc;
+      this.monoSrc = temp;
     },
   },
 };
 </script>
 
-<style>
-.raw-image, .mono-image {
-  width: 300px;
+<style lang="stylus">
+.preview {
+  position: relative;
+  width: 60%;
+  margin: auto;
+}
+
+.small-image {
+  width: 20%;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  background-color: #fff;
+
+  &:hover {
+  }
+}
+
+.large-image {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.small-image, .large-image {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 </style>
