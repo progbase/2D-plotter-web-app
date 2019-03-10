@@ -31,7 +31,5 @@ export default {
 </script>
 
 <style>
-#canvas {
-  margin: auto;
-}
+
 </style>
