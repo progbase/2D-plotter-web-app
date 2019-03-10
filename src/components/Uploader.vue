@@ -24,6 +24,8 @@ export default {
     },
 
     async onUpload(e) {
+      if (e.srcElement.files.length < 0) return;
+
       const imageFile = e.srcElement.files[0];
 
       const rawSrc = await this.readRaw(imageFile);
@@ -60,10 +62,9 @@ export default {
 
         context.drawImage(imageBitmap, 0, 0);
 
-        const imageData = context.getImageData(0, 0, imageBitmap.height, imageBitmap.width);
-        console.log(imageData);
+        const imageData = context.getImageData(0, 0, imageBitmap.width, imageBitmap.height);
 
-        const length = imageData.height * imageData.width * 4;
+        const length = imageData.height * imageBitmap.width * 4;
         for (let i = 0; i < length; i += 4) {
           const R = imageData.data[i + 0];
           const G = imageData.data[i + 1];
