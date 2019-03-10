@@ -62,8 +62,10 @@ export default {
 
     onMouseMove({ absolutePointer }) {
       if (this.isDrawing) {
-        this.lastPoint.x = Math.round(absolutePointer.x);
-        this.lastPoint.y = Math.round(absolutePointer.y);
+        this.lastPoint = {
+          x: Math.round(absolutePointer.x),
+          y: Math.round(absolutePointer.y),
+        };
       }
     },
 
