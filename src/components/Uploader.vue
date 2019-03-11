@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <span class="uploader-container">
     <button class="button is-warning" @click="triggerInput">
       Upload Image
     </button>
@@ -11,7 +11,7 @@
       name="pic"
       accept="image/*"
       @change="onUpload">
-  </div>
+  </span>
 </template>
 
 <script>
@@ -84,12 +84,6 @@ export default {
           }
 
           imageData.data[i + 3] = 255;
-
-          // for test
-          // context.putImageData(imageData, 0, 0);
-          // const imageBase64 = canvas.toDataURL();
-          // self.$emit('mono-load', imageBase64);
-          //
         }
 
         context.putImageData(imageData, 0, 0);
@@ -101,8 +95,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="stylus">
 .hidden-input {
   display: none;
 }
+
 </style>
