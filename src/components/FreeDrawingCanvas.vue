@@ -36,44 +36,80 @@ export default {
   },
 
   mounted() {
-    this.canvas = new fabric.Canvas('canva', {
-      isDrawingMode: true,
-      backgroundColor: '#efefef',
-    });
-    this.canvas.freeDrawingBrush.color = 'black';
-    this.canvas.freeDrawingBrush.width = 4;
-    this.canvas.renderAll();
-
-    this.canvas.on('mouse:move', this.onMouseMove);
-    this.canvas.on('mouse:down', this.onMouseDown);
-    this.canvas.on('mouse:up', this.onMouseUp);
+    this.initCanvas();
 
     this.$emit('change-point', this.lastPoint);
   },
 
   beforeDestroy() {
-    this.canvas.dispose();
+    this.destroyCanvas();
   },
 
   methods: {
+    inBorders(point) {
+      return point.x >= 0 && point.x <= this.size && point.y >= 0 && point.y <= this.size;
+    },
+
     onMouseDown() {
-      this.isDrawing = true;
+      this.startDrawing();
     },
 
     onMouseMove({ absolutePointer }) {
       if (this.isDrawing) {
-        this.lastPoint = {
+        const point = {
           x: Math.round(absolutePointer.x),
           y: Math.round(absolutePointer.y),
         };
+
+        if (this.inBorders(point)) {
+          this.lastPoint = point;
+        } else {
+          this.endDrawing();
+        }
+      } else {
+        //
+        if (!this.inBorders(absolutePointer)) {
+          console.log('out of range');
+        } else {
+          //
+        }
       }
     },
 
     onMouseUp() {
+      if (this.isDrawing) {
+        this.endDrawing();
+      }
+    },
+
+    startDrawing() {
+      this.isDrawing = true;
+    },
+
+    endDrawing() {
       this.$store.dispatch('pushPath', this.path);
 
       this.isDrawing = false;
       this.path = [];
+    },
+
+    destroyCanvas() {
+      this.canvas.dispose();
+      this.canvas = null;
+    },
+
+    initCanvas() {
+      this.canvas = new fabric.Canvas('canva', {
+        isDrawingMode: true,
+        backgroundColor: '#efefef',
+      });
+      this.canvas.freeDrawingBrush.color = 'black';
+      this.canvas.freeDrawingBrush.width = 4;
+      this.canvas.renderAll();
+
+      this.canvas.on('mouse:move', this.onMouseMove);
+      this.canvas.on('mouse:down', this.onMouseDown);
+      this.canvas.on('mouse:up', this.onMouseUp);
     },
   },
 };

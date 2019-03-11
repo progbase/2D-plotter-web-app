@@ -6,7 +6,7 @@
     <div class="container">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://github.com/orgs/progbase/teams/baboo-industry">
-          <p class="title">Baboo</p>
+          <p class="title">Baboo Indastry Team</p>
         </a>
 
         <a
