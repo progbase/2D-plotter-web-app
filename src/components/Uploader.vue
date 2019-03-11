@@ -1,6 +1,10 @@
 <template>
   <span class="uploader-container">
-    <button class="button is-warning" @click="triggerInput">
+    <button
+      class="button is-warning"
+      :class="{ 'is-loading': uploading }"
+      :disabled="uploading"
+      @click="triggerInput">
       Upload Image
     </button>
 
@@ -18,6 +22,10 @@
 export default {
   name: 'Uploader',
 
+  data: () => ({
+    uploading: false,
+  }),
+
   methods: {
     triggerInput() {
       this.$refs.input.click();
@@ -25,8 +33,10 @@ export default {
 
     async onUpload(e) {
       this.$emit('start-load');
+      this.uploading = true;
 
       if (e.srcElement.files.length < 0) {
+        this.uploading = false;
         this.$emit('error-load', { message: 'no files detected', err: null });
         return;
       }
@@ -38,17 +48,15 @@ export default {
 
       try {
         const rawSrc = await this.readRaw(imageFile);
-        this.$emit('raw-load', rawSrc);
-      } catch (err) {
-        this.$emit('error-load', { message: 'raw was not loaded', err });
-      }
-
-      try {
         const monoSrc = await this.monoify(imageFile);
+
+        this.$emit('raw-load', rawSrc);
         this.$emit('mono-load', monoSrc);
       } catch (err) {
-        this.$emit('error-load', { message: 'mono was not loaded', err });
+        this.$emit('error-load', { message: 'raw/mono was not loaded', err });
       }
+
+      this.uploading = false;
     },
 
     readRaw(imageFile) {

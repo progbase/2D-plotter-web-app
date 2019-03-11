@@ -33,14 +33,16 @@
 
           <button
             v-if="!connected"
-            :class="['button', 'is-success', connecting ? 'is-loading' : '']"
+            class="button is-success"
+            :class="{ 'is-loading': connecting }"
             @click="connect">
             Connect
           </button>
 
           <button
             v-if="connected"
-            :class="['button', 'is-danger', disconnecting ? 'is-loading' : '']"
+            class="button is-danger"
+            :class="{ 'is-loading': disconnecting }"
             @click="disconnect">
             Disconnect
           </button>
