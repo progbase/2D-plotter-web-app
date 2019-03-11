@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     pathes: [],
     connected: false,
+    mode: 'normal',
   },
   mutations: {
     PUSH_PATH(state, path) {
@@ -15,6 +16,10 @@ export default new Vuex.Store({
 
     SET_CONNECTED(state, connected) {
       state.connected = connected;
+    },
+
+    SET_MODE(state, mode) {
+      state.mode = mode;
     },
   },
   actions: {
@@ -37,6 +42,16 @@ export default new Vuex.Store({
         setTimeout(() => {
           // on resolve
           commit('SET_CONNECTED', false);
+          resolve();
+        }, 1000);
+      });
+    },
+
+    changeMode({ commit }, mode) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // on resolve
+          commit('SET_MODE', mode);
           resolve();
         }, 1000);
       });

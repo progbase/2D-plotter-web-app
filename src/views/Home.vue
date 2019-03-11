@@ -44,7 +44,6 @@
         </div>
       </div>
     </section>
-
   </div>
 </template>
 
@@ -102,7 +101,7 @@ export default {
 
         self.endDrawing();
       }, 3000);
-    }
+    },
   },
 };
 </script>

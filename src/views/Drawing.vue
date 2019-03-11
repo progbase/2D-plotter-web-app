@@ -19,11 +19,30 @@
 
     <section class="section">
       <div class="container">
-        <free-drawing-canvas :size="500" @change-point="onChangeBrushPoint" />
+        <div class="columns">
+          <div class="column">
+            <free-drawing-canvas
+              :size="400"
+              @change-point="onChangeBrushPoint" />
+          </div>
 
-        <span>
-          Current Brush Point (x: {{ point.x }}; y: {{ point.y }})
-        </span>
+          <div class="column">
+            <div>Mode {{ mode }}</div>
+
+            <div>
+              <button
+                class="button is-warning"
+                :class="{ 'is-loading': changingMode }"
+                @click="onChangeMode">
+                Change
+              </button>
+              <!--<span>mode to {{ mode == 'normal' ? 'real-time' : 'normal' }}</span>-->
+            </div>
+            <div>
+              Current Brush Point (x: {{ point.x }}; y: {{ point.y }})
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -38,16 +57,31 @@ export default {
 
   data: () => ({
     point: { x: NaN, y: NaN },
+    changingMode: false,
   }),
+
+  computed: {
+    mode() {
+      return this.$store.state.mode;
+    },
+  },
 
   methods: {
     onChangeBrushPoint(p) {
       this.point = p;
     },
+
+    async onChangeMode() {
+      this.changingMode = true;
+      const newMode = this.mode == 'normal' ? 'real-time' : 'normal';
+
+      await this.$store.dispatch('changeMode', newMode);
+      this.changingMode = false;
+    }
   },
 };
 </script>
 
-<style>
+<style lang="stylus">
 
 </style>
