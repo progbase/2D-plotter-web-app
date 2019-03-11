@@ -1,10 +1,20 @@
 <template>
   <div class="home">
-    <div class="columns">
-      <div class="column">
-        <upload @raw-load="rawLoaded" @mono-load="monoLoaded" />
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Image preview
+          </h1>
+          <h2 class="subtitle hero-upload">
+            <span>
+              Upload image you want to print and see how it might be look like
+            </span>
+            <upload @raw-load="rawLoaded" @mono-load="monoLoaded" />
+          </h2>
+        </div>
       </div>
-    </div>
+    </section>
 
     <div class="preview">
       <image-card
@@ -55,7 +65,7 @@ export default {
 <style lang="stylus">
 .preview {
   position: relative;
-  width: 60%;
+  width: 50%;
   margin: auto;
 }
 
@@ -79,5 +89,12 @@ export default {
 
 .small-image, .large-image {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.hero-upload {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
