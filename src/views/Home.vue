@@ -21,7 +21,19 @@
     <section class="section">
       <div class="columns">
         <div class="column">
-          Controls
+          <button
+            class="button is-success"
+            :class="{ 'is-loading': isPlotterDrawing }"
+            :disabled="isPlotterDrawing || !connected"
+            @click="startDrawing">
+            Start drawing
+          </button>
+
+          <progress
+            v-if="isPlotterDrawing"
+            class="progress is-warning"
+            :value="drawingProgress"
+            max="100" />
         </div>
 
         <div class="column">
@@ -33,7 +45,6 @@
       </div>
     </section>
 
-    <progress class="progress is-warning" :value="75" max="100" />
   </div>
 </template>
 
@@ -50,7 +61,15 @@ export default {
   data: () => ({
     rawSrc: PlaceholderImage,
     monoSrc: BWPlaceholderImage,
+    isPlotterDrawing: false,
+    drawingProgress: 0,
   }),
+
+  computed: {
+    connected() {
+      return this.$store.state.connected;
+    },
+  },
 
   methods: {
     rawLoaded(src) {
@@ -64,6 +83,26 @@ export default {
     loadingError() {
       // show error
     },
+
+    endDrawing() {
+      this.isPlotterDrawing = false;
+      this.drawingProgress = 0;
+    },
+
+    startDrawing() {
+      this.isPlotterDrawing = true;
+
+      const self = this;
+      const interval = setInterval(() => {
+        self.drawingProgress += 1;
+      }, 30);
+
+      setTimeout(() => {
+        clearInterval(interval);
+
+        self.endDrawing();
+      }, 3000);
+    }
   },
 };
 </script>

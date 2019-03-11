@@ -19,14 +19,11 @@
 
     <section class="section">
       <div class="container">
-        <div class="columns">
-          <div class="column is-offset-one-quarter">
-            <free-drawing-canvas :size="500" @change-point="onChangeBrushPoint" />
-            <span>
-              Current Brush Point (x: {{ point.x }}; y: {{ point.y }})
-            </span>
-          </div>
-        </div>
+        <free-drawing-canvas :size="500" @change-point="onChangeBrushPoint" />
+
+        <span>
+          Current Brush Point (x: {{ point.x }}; y: {{ point.y }})
+        </span>
       </div>
     </section>
   </div>
