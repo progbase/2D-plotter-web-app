@@ -10,13 +10,26 @@
             <span>
               Upload image you want to print and see how it might be look like
             </span>
-            <upload @raw-load="rawLoaded" @mono-load="monoLoaded" />
+            <upload
+              @error-load="loadingError"
+              @start-load="loadingStarted"
+              @raw-load="rawLoaded"
+              @mono-load="monoLoaded" />
           </h2>
         </div>
       </div>
     </section>
 
     <div class="preview">
+      <loading
+        :active.sync="isLoading"
+        :is-full-page="true"
+        :height="128"
+        :width="128"
+        color="#007bff"
+        loader="dots"
+        background-color="#ffffff" />
+
       <image-card
         :src="rawSrc"
         class="small-image"
@@ -30,18 +43,23 @@
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay';
+
 import PlaceholderImage from '../assets/meow.png';
 import BWPlaceholderImage from '../assets/meow-bw.png';
 import Upload from '../components/Uploader.vue';
 import ImageCard from '../components/ImageCard.vue';
 
+import 'vue-loading-overlay/dist/vue-loading.css';
+
 export default {
   name: 'Home',
-  components: { Upload, ImageCard },
+  components: { Loading, Upload, ImageCard },
 
   data: () => ({
     rawSrc: PlaceholderImage,
     monoSrc: BWPlaceholderImage,
+    isLoading: false,
   }),
 
   methods: {
@@ -51,6 +69,15 @@ export default {
 
     monoLoaded(src) {
       this.monoSrc = src;
+      this.isLoading = false;
+    },
+
+    loadingStarted() {
+      this.isLoading = true;
+    },
+
+    loadingError() {
+      // show error
     },
 
     swap() {
@@ -67,6 +94,7 @@ export default {
   position: relative;
   width: 50%;
   margin: auto;
+  height: 100%;
 }
 
 .small-image {

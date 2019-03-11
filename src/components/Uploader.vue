@@ -24,15 +24,31 @@ export default {
     },
 
     async onUpload(e) {
-      if (e.srcElement.files.length < 0) return;
+      this.$emit('start-load');
+
+      if (e.srcElement.files.length < 0) {
+        this.$emit('error-load', { message: 'no files detected', err: null });
+        return;
+      }
+
 
       const imageFile = e.srcElement.files[0];
 
-      const rawSrc = await this.readRaw(imageFile);
       this.$emit('upload', imageFile);
-      this.$emit('raw-load', rawSrc);
-      const monoSrc = await this.monoify(imageFile);
-      this.$emit('mono-load', monoSrc);
+
+      try {
+        const rawSrc = await this.readRaw(imageFile);
+        this.$emit('raw-load', rawSrc);
+      } catch (err) {
+        this.$emit('error-load', { message: 'raw was not loaded', err });
+      }
+
+      try {
+        const monoSrc = await this.monoify(imageFile);
+        this.$emit('mono-load', monoSrc);
+      } catch (err) {
+        this.$emit('error-load', { message: 'mono was not loaded', err });
+      }
     },
 
     readRaw(imageFile) {
