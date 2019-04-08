@@ -22,4 +22,7 @@ class PlotterApi {
   }
 }
 
-export default new PlotterApi('http://localhost:3001');
+// const baseURL = 'http://localhost:3001';
+const baseURL = '';
+
+export default new PlotterApi(baseURL);

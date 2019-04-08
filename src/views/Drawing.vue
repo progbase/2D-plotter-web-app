@@ -73,7 +73,7 @@ export default {
 
     async onChangeMode() {
       this.changingMode = true;
-      const newMode = this.mode == 'normal' ? 'real-time' : 'normal';
+      const newMode = this.mode === 'normal' ? 'real-time' : 'normal';
 
       await this.$store.dispatch('changeMode', newMode);
       this.changingMode = false;
