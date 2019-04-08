@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import PlaceholderImage from '../assets/meow.png';
 import BWPlaceholderImage from '../assets/meow-bw.png';
 import Upload from '../components/Uploader.vue';
@@ -89,18 +90,24 @@ export default {
     },
 
     startDrawing() {
-      this.isPlotterDrawing = true;
+      // this.isPlotterDrawing = true;
+      //
+      // const self = this;
+      // const interval = setInterval(() => {
+      //   self.drawingProgress += 1;
+      // }, 30);
+      //
+      // setTimeout(() => {
+      //   clearInterval(interval);
+      //
+      //   self.endDrawing();
+      // }, 3000);
 
-      const self = this;
-      const interval = setInterval(() => {
-        self.drawingProgress += 1;
-      }, 30);
 
-      setTimeout(() => {
-        clearInterval(interval);
-
-        self.endDrawing();
-      }, 3000);
+      // console.log(this.monoSrc);
+      axios.post('http://localhost:3000/session-start', { image: this.monoSrc }).then((res) => {
+        console.log(res);
+      });
     },
   },
 };
