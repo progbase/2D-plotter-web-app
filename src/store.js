@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import papi from './api';
 
 Vue.use(Vuex);
 
@@ -27,24 +28,24 @@ export default new Vuex.Store({
       commit('PUSH_PATH', payload);
     },
 
-    connect({ commit }) {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // on resolve
-          commit('SET_CONNECTED', true);
-          resolve();
-        }, 1000);
-      });
+    async connect({ commit }) {
+      try {
+        await papi.connect();
+        commit('SET_CONNECTED', true);
+        console.log('Connected');
+      } catch (e) {
+        console.error('Connection error', e);
+      }
     },
 
-    disconnect({ commit }) {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // on resolve
-          commit('SET_CONNECTED', false);
-          resolve();
-        }, 1000);
-      });
+    async disconnect({ commit }) {
+      try {
+        await papi.disconnect();
+        commit('SET_CONNECTED', false);
+        console.log('Disconnected');
+      } catch (e) {
+        console.error('Disconnection error', e);
+      }
     },
 
     changeMode({ commit }, mode) {

@@ -31,14 +31,14 @@
             v-show="!isPlotterDrawing"
             class="button is-success"
             :disabled="!connected"
-            @click="startDrawing">
+            @click="startDS">
             Start
           </button>
 
           <button
             v-show="isPlotterDrawing"
             class="button is-danger"
-            @click="startDrawing">
+            @click="endDS">
             Stop
           </button>
         </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import papi from '../api';
 import PlaceholderImage from '../assets/meow.png';
 import BWPlaceholderImage from '../assets/meow-bw.png';
 import Upload from '../components/Uploader.vue';
@@ -97,24 +97,30 @@ export default {
     },
 
     startDrawing() {
-      // this.isPlotterDrawing = true;
-      //
-      // const self = this;
-      // const interval = setInterval(() => {
-      //   self.drawingProgress += 1;
-      // }, 30);
-      //
-      // setTimeout(() => {
-      //   clearInterval(interval);
-      //
-      //   self.endDrawing();
-      // }, 3000);
+      this.isPlotterDrawing = true;
 
+      const self = this;
+      const interval = setInterval(() => {
+        self.drawingProgress += 1;
+      }, 2000);
 
-      // console.log(this.monoSrc);
-      axios.post('http://localhost:3000/session-start', { image: this.monoSrc }).then((res) => {
-        console.log(res);
-      });
+      setTimeout(() => {
+        clearInterval(interval);
+
+        self.endDrawing();
+      }, 100000);
+    },
+
+    async startDS() {
+      const res = await papi.startDS(this.monoSrc).catch(err => console.error(err));
+      console.log('DS started:', res);
+      this.startDrawing();
+    },
+
+    async endDS() {
+      const res = await papi.endDS().catch(err => console.error(err));
+      console.log('DS ended:', res);
+      this.endDrawing();
     },
   },
 };
