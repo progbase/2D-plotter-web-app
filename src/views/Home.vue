@@ -21,19 +21,26 @@
     <section class="section">
       <div class="columns">
         <div class="column">
-          <button
-            class="button is-success"
-            :class="{ 'is-loading': isPlotterDrawing }"
-            :disabled="isPlotterDrawing || !connected"
-            @click="startDrawing">
-            Start drawing
-          </button>
-
           <progress
             v-if="isPlotterDrawing"
             class="progress is-warning"
             :value="drawingProgress"
             max="100" />
+
+          <button
+            v-show="!isPlotterDrawing"
+            class="button is-success"
+            :disabled="!connected"
+            @click="startDrawing">
+            Start
+          </button>
+
+          <button
+            v-show="isPlotterDrawing"
+            class="button is-danger"
+            @click="startDrawing">
+            Stop
+          </button>
         </div>
 
         <div class="column">

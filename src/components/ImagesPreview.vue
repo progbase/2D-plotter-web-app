@@ -1,9 +1,9 @@
 <template>
   <div class="images-preview">
-    <image-card :src="monoSrc" class="large-image" />
+    <image-card :src="!swapped ? monoSrc : rawSrc" class="large-image" />
 
     <image-card
-      :src="rawSrc"
+      :src="!swapped ? rawSrc : monoSrc"
       class="small-image"
       @click="swap" />
   </div>
@@ -29,11 +29,15 @@ export default {
     },
   },
 
+  data() {
+    return {
+      swapped: false,
+    };
+  },
+
   methods: {
     swap() {
-      const temp = this.rawSrc;
-      this.rawSrc = this.monoSrc;
-      this.monoSrc = temp;
+      this.swapped = !this.swapped;
     },
   },
 };
