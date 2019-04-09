@@ -5,8 +5,8 @@ class PlotterApi {
     this.base = url;
   }
 
-  startDS(image) {
-    return axios.post(`${this.base}/session/start`, { image });
+  startDS(image, invert) {
+    return axios.post(`${this.base}/session/start`, { image, invert });
   }
 
   endDS() {

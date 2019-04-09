@@ -66,6 +66,7 @@ export default {
   components: { ImagesPreview, Upload },
 
   data: () => ({
+    progressStep: 5,
     rawSrc: PlaceholderImage,
     monoSrc: BWPlaceholderImage,
     isPlotterDrawing: false,
@@ -112,7 +113,7 @@ export default {
     },
 
     async startDS() {
-      const res = await papi.startDS(this.monoSrc).catch(err => console.error(err));
+      const res = await papi.startDS(this.monoSrc, true).catch(err => console.error(err));
       console.log('DS started:', res);
       this.startDrawing();
     },
