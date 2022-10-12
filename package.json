@@ -11,7 +11,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.7.4",
-    "fabric": "^2.7.0",
+    "fabric": "^5.2.4",
     "jimp": "^0.6.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
